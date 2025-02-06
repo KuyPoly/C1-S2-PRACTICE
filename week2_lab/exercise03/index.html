@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+        ul { list-style-type: none; }
+        li{
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fd0606;
+            border-radius: 5px;
+            color: white;
+            width: 200px;    
+            text-align: center;
+        }
+        .taskForm{
+            margin-bottom: 10px;
+        }
+        #taskInput{
+            width: 200px;
+            padding: 5px;
+            border-radius: 25px;
+            margin-bottom: 10px;
+        }
+        #priority{
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .btn {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            width: fit-content;
+        }
+    </style>
+</head>
+<body>
+    <div class="taskForm">
+        <label for="taskInput">Task:</label>
+        <br>
+        <input type="text" id="taskInput" placeholder="Enter a task">
+    </div>
+    <div class="taskForm">
+        <label for="priority">Tag:</label>
+        <br>
+        <select name="important" id="priority">
+            <option value="1">Important</option>
+            <option value="0">Not Important</option>
+        </select>
+    </div>
+    
+    <div class="btn">
+        <button onclick="addTask()">Add Task</button>
+        <button id="importantTask">Show only important tasks</button>
+        <button id="notImportantTask">Show the tasks that are not important</button>
+        <button id="allTasks">Show all tasks</button>
+    </div>
+
+    <div>
+        <ul id="tasks"></ul>
+    </div>
+
+    <script>
+        let tasks = [
+            { description: "Task 1", priority: 1 },
+            { description: "Task 2", priority: 0 },
+            { description: "Task 3", priority: 1 }
+        ];
+
+        function renderTasks() {
+            let tasksList = document.getElementById("tasks");
+            tasksList.innerHTML = "";
+            tasks.forEach(task => {
+                let newTask = document.createElement("li");
+                newTask.textContent = task.description;
+                if (task.priority === 0) {
+                    newTask.style.backgroundColor = "grey";
+                }
+                tasksList.appendChild(newTask);
+            });
+        }
+
+        function addTask() {
+            let taskInput = document.getElementById("taskInput");
+            let priority = document.getElementById("priority");
+            
+            if (taskInput.value.trim() !== "") {
+                tasks.push({ description: taskInput.value, priority: parseInt(priority.value) });
+                renderTasks();
+                taskInput.value = ""; // Clear input after adding
+            }
+        }
+
+        function importantTask() {
+            let tasksList = document.getElementById("tasks");
+            tasksList.innerHTML = "";
+            tasks.filter(task => task.priority === 1).forEach(task => {
+                let newTask = document.createElement("li");
+                newTask.textContent = task.description;
+                tasksList.appendChild(newTask);
+            });
+        }
+
+        function notImportantTask() {
+            let tasksList = document.getElementById("tasks");
+            tasksList.innerHTML = "";
+            tasks.filter(task => task.priority === 0).forEach(task => {
+                let newTask = document.createElement("li");
+                newTask.textContent = task.description;
+                newTask.style.backgroundColor = "grey";
+                tasksList.appendChild(newTask);
+            });
+        }
+
+        document.getElementById("importantTask").addEventListener("click", importantTask);
+        document.getElementById("notImportantTask").addEventListener("click", notImportantTask);
+        document.getElementById("allTasks").addEventListener("click", renderTasks);
+
+        // Initial render
+        renderTasks();
+    </script>
+</body>
+</html>
