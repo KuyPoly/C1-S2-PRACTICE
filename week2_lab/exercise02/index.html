@@ -62,6 +62,10 @@
             let tasks = document.getElementById("tasks");
             let newTask = document.createElement("li");
             newTask.textContent = taskInput.value;
+            if (!taskInput.value) {
+                alert("Please enter a task");
+                return;
+            }
             if(priority.value === "0"){
                 newTask.style.backgroundColor = "grey";
             }
